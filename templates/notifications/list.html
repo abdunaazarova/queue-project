@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Notifications - Navbat.uz{% endblock %}
+{% block content %}
+<section class="panel-section">
+    <h2>Notifications</h2>
+    {% for notification in notifications %}
+    <article class="service-card">
+        <p>{{ notification.message }}</p>
+        <small>{{ notification.created_at|timesince }} ago</small>
+    </article>
+    {% empty %}<p>No notifications yet.</p>{% endfor %}
+</section>
+{% endblock %}

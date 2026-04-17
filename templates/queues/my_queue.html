@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}My Queue - Navbat.uz{% endblock %}
+{% block content %}
+<section class="queue-panel">
+    <h2>{{ people_ahead }} people ahead</h2>
+    <p>{{ entry.queue.service.name }}</p>
+    <div class="progress-wrap"><div class="progress-bar" style="width: {{ progress }}%;"></div></div>
+    <p><strong>{{ estimated_wait }} minutes</strong> estimated wait time</p>
+    <div class="stats-grid">
+        <div><h4>#{{ entry.position }}</h4><p>Your Number</p></div>
+        <div><h4>{{ total_people }}</h4><p>Total in Queue</p></div>
+        <div><h4>{{ entry.joined_at|time:'H:i' }}</h4><p>Joined At</p></div>
+    </div>
+    <form method="post" action="{% url 'queues:leave_queue' entry.id %}">
+        {% csrf_token %}
+        <button class="btn btn-danger" type="submit">Leave Queue</button>
+    </form>
+</section>
+{% endblock %}

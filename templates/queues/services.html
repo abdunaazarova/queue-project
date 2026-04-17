@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Services - Navbat.uz{% endblock %}
+{% block content %}
+<section class="panel-section">
+    <div class="section-head">
+        <h2>Choose Service</h2>
+        {% if request.user.role == 'admin' %}
+            <a href="{% url 'queues:admin_dashboard' %}" class="btn btn-primary">Open Super Admin Panel</a>
+        {% endif %}
+    </div>
+    {% if request.user.role != 'admin' %}
+        <p class="muted service-note">
+            Queues are created and managed by Super Admins. You can view who created each queue on every service card.
+        </p>
+    {% endif %}
+
+    <form method="get" class="filter-shell">
+        <div class="search-wrap">
+            <input type="text" name="q" placeholder="Search services or locations..." value="{{ request.GET.q }}" />
+        </div>
+        <div class="filter-controls">
+            <div class="select-wrap">
+                <select name="category">
+                    <option value="all">All categories</option>
+                    {% for value, label in categories %}
+                    <option value="{{ value }}" {% if selected_category == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button class="btn btn-primary" type="submit">Apply</button>
+            <a href="{% url 'queues:services' %}" class="btn btn-secondary">Reset</a>
+        </div>
+    </form>
+
+    {% for service in services %}
+    <article class="service-card">
+        <div class="service-header">
+            <h3>{{ service.name }}</h3>
+            <span class="badge category">{{ service.get_category_display }}</span>
+        </div>
+        <p>{{ service.location }}</p>
+        {% if service.description %}<p class="muted">{{ service.description }}</p>{% endif %}
+        <div class="meta-row">
+            <span>{{ service.queue.estimated_wait_minutes }} min wait</span>
+            <span>{{ service.queue.total_waiting }} in queue</span>
+            <span>Queue by {{ service.queue.created_by.email|default:'System Admin' }}</span>
+        </div>
+        <form method="post" action="{% url 'queues:join_queue' service.id %}">
+            {% csrf_token %}
+            <button class="btn btn-accent full" type="submit">Join Queue</button>
+        </form>
+    </article>
+    {% empty %}
+    <p>No services found.</p>
+    {% endfor %}
+</section>
+{% endblock %}

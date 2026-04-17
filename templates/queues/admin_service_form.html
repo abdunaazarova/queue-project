@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Create Service{% endblock %}
+{% block content %}
+<section class="admin-form-shell">
+    <div class="admin-form-header">
+        <h2>Create Service</h2>
+        <p class="muted">Add a service that users can join from the Services page.</p>
+    </div>
+    <form method="post" class="form-stack">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="form-error">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <div class="field-group">
+            <label for="{{ form.name.id_for_label }}">Service Name</label>
+            {{ form.name }}
+            {% if form.name.errors %}<div class="field-error">{{ form.name.errors|striptags }}</div>{% endif %}
+        </div>
+
+        <div class="field-group">
+            <label for="{{ form.category.id_for_label }}">Category</label>
+            {{ form.category }}
+            {% if form.category.errors %}<div class="field-error">{{ form.category.errors|striptags }}</div>{% endif %}
+        </div>
+
+        <div class="field-group">
+            <label for="{{ form.location.id_for_label }}">Location</label>
+            {{ form.location }}
+            {% if form.location.errors %}<div class="field-error">{{ form.location.errors|striptags }}</div>{% endif %}
+        </div>
+
+        <div class="field-group">
+            <label for="{{ form.description.id_for_label }}">Description</label>
+            {{ form.description }}
+            {% if form.description.errors %}<div class="field-error">{{ form.description.errors|striptags }}</div>{% endif %}
+        </div>
+
+        <div class="form-actions">
+            <a href="{% url 'queues:admin_dashboard' %}" class="btn btn-secondary">Cancel</a>
+            <button class="btn btn-primary" type="submit">Save Service</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

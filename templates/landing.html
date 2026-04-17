@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Navbat.uz - Skip The Wait{% endblock %}
+{% block body_class %}landing-body{% endblock %}
+{% block page_wrap_class %}landing-wrap{% endblock %}
+{% block nav %}
+<nav class="top-nav landing-nav">
+    <a href="{% url 'landing' %}" class="brand">Navbat.uz</a>
+    <div class="nav-links">
+        <a href="{% url 'accounts:signup' %}" class="nav-chip">Create account</a>
+        <a href="{% url 'accounts:login' %}" class="nav-chip nav-chip-light">Login</a>
+    </div>
+</nav>
+{% endblock %}
+{% block content %}
+<section class="hero">
+    <div class="hero-icon">&#9716;</div>
+    <h1>Navbat.uz</h1>
+    <p>Skip the wait. Take flight with time.</p>
+    <div class="feature-grid">
+        <div class="glass-card"><h3>Skip the Wait</h3><p>Get your spot virtually and track your position in real-time.</p></div>
+        <div class="glass-card"><h3>Live Updates</h3><p>See exactly how many people are ahead of you.</p></div>
+        <div class="glass-card"><h3>Smart Notifications</h3><p>Get alerted when it is almost your turn.</p></div>
+        <div class="glass-card"><h3>Optimized Queues</h3><p>AI-inspired flow reduces wait times across services.</p></div>
+    </div>
+    <a href="{% url 'accounts:login' %}" class="btn btn-primary">Get Started</a>
+</section>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Login - Navbat.uz{% endblock %}
+{% block content %}
+<div class="auth-card">
+    <h2>Welcome Back</h2>
+    <p class="muted">Sign in to access your digital queue</p>
+    <form method="post" class="form-stack">
+        {% csrf_token %}
+        {{ form.username }}
+        {{ form.password }}
+        <button type="submit" class="btn btn-primary">Sign In</button>
+    </form>
+    <p>Don't have an account? <a href="{% url 'accounts:signup' %}">Create one now</a></p>
+</div>
+{% endblock %}

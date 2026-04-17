@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Create Queue{% endblock %}
+{% block content %}
+<section class="admin-form-shell">
+    <div class="admin-form-header">
+        <h2>Create Queue</h2>
+        <p class="muted">Configure queue settings for a selected service.</p>
+    </div>
+    <form method="post" class="form-stack">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="form-error">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <div class="field-group">
+            <label for="{{ form.service.id_for_label }}">Service</label>
+            {{ form.service }}
+            {% if form.service.errors %}<div class="field-error">{{ form.service.errors|striptags }}</div>{% endif %}
+        </div>
+
+        <div class="field-group">
+            <label for="{{ form.estimated_wait_minutes.id_for_label }}">Estimated Wait Time (minutes)</label>
+            {{ form.estimated_wait_minutes }}
+            {% if form.estimated_wait_minutes.errors %}<div class="field-error">{{ form.estimated_wait_minutes.errors|striptags }}</div>{% endif %}
+        </div>
+
+        <div class="form-actions">
+            <a href="{% url 'queues:admin_dashboard' %}" class="btn btn-secondary">Cancel</a>
+            <button class="btn btn-primary" type="submit">Save Queue</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

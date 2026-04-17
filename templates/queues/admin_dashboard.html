@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Super Admin Dashboard{% endblock %}
+{% block content %}
+<section class="panel-section">
+    <h2>Super Admin Panel</h2>
+    <p class="muted">Create services, configure queues, and serve users from a single place.</p>
+    <div class="toolbar">
+        <a href="{% url 'queues:admin_service_create' %}" class="btn btn-primary">Create Service</a>
+        <a href="{% url 'queues:admin_queue_create' %}" class="btn btn-secondary">Create Queue</a>
+    </div>
+    <h3>Active Queues</h3>
+    {% for queue in queues %}
+    <article class="service-card">
+        <h3>{{ queue.service.name }}</h3>
+        <p>{{ queue.total_waiting }} waiting - {{ queue.estimated_wait_minutes }} min average</p>
+        <p class="muted">Created by: {{ queue.created_by.email|default:'System Admin' }}</p>
+        <form method="post" action="{% url 'queues:serve_next' queue.id %}">
+            {% csrf_token %}
+            <button class="btn btn-accent" type="submit">Serve Next User</button>
+        </form>
+    </article>
+    {% empty %}<p>No queues configured.</p>{% endfor %}
+
+    <h3>Users In Queue</h3>
+    {% for item in active_entries %}
+    <article class="service-card">
+        <p>{{ item.user.email }} - {{ item.queue.service.name }} - Position {{ item.position }}</p>
+    </article>
+    {% empty %}<p>No active users in queues.</p>{% endfor %}
+</section>
+{% endblock %}

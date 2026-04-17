@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}History - Navbat.uz{% endblock %}
+{% block content %}
+<section class="panel-section">
+    <h2>Queue History</h2>
+    {% for entry in history_entries %}
+    <article class="service-card">
+        <h3>{{ entry.queue.service.name }} <span class="badge">Completed</span></h3>
+        <p>Queue Number: {% if entry.position %}#{{ entry.position }}{% else %}#{{ entry.id }}{% endif %}</p>
+        <div class="meta-row">
+            <span>{{ entry.joined_at|date:'M d, Y' }}</span>
+            <span>Total People: {{ entry.queue.entries.count }}</span>
+            <span>Wait Time: {{ entry.queue.estimated_wait_minutes }} min</span>
+        </div>
+    </article>
+    {% empty %}<p>No queue history yet.</p>{% endfor %}
+</section>
+{% endblock %}

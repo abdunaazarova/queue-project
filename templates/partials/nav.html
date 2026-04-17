@@ -1,0 +1,18 @@
+<nav class="top-nav">
+    <a href="{% url 'landing' %}" class="brand">Navbat.uz</a>
+    <div class="nav-links">
+        {% if user.is_authenticated %}
+            <a href="{% url 'queues:services' %}">Locations</a>
+            <a href="{% url 'queues:history' %}">History</a>
+            <a href="{% url 'notifications:list' %}">Alerts</a>
+            {% if user.role == 'admin' %}<a href="{% url 'queues:admin_dashboard' %}">Super Admin</a>{% endif %}
+            <form method="post" action="{% url 'accounts:logout' %}" class="inline-form">
+                {% csrf_token %}
+                <button type="submit" class="link-btn">Logout</button>
+            </form>
+        {% else %}
+            <a href="{% url 'accounts:login' %}">Login</a>
+            <a href="{% url 'accounts:signup' %}">Signup</a>
+        {% endif %}
+    </div>
+</nav>

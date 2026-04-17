@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Signup - Navbat.uz{% endblock %}
+{% block content %}
+<div class="auth-card">
+    <h2>Create Account</h2>
+    <p class="muted">Join Navbat.uz and skip the wait</p>
+    <form method="post" class="form-stack">
+        {% csrf_token %}
+        {{ form.email }}
+        {{ form.password1 }}
+        <div class="password-meter-wrap">
+            <div class="meter-label-row">
+                <small>Password strength</small>
+                <small id="password-strength-text" class="strength-text weak">Weak</small>
+            </div>
+            <div class="password-meter">
+                <div id="password-meter-fill" class="password-meter-fill weak"></div>
+            </div>
+            <small class="muted">Weak: only letters/numbers · Medium: letters + numbers · Strong: upper/lower + number + symbol</small>
+        </div>
+        {{ form.password2 }}
+        <button type="submit" class="btn btn-primary">Create Account</button>
+    </form>
+    <p>Already have an account? <a href="{% url 'accounts:login' %}">Sign in</a></p>
+</div>
+<script>
+  (function () {
+    const input = document.getElementById('id_password1');
+    const fill = document.getElementById('password-meter-fill');
+    const text = document.getElementById('password-strength-text');
+    if (!input || !fill || !text) return;
+
+    function evaluate(value) {
+      const hasLetters = /[a-zA-Z]/.test(value);
+      const hasLower = /[a-z]/.test(value);
+      const hasUpper = /[A-Z]/.test(value);
+      const hasNumbers = /[0-9]/.test(value);
+      const hasSpecial = /[^a-zA-Z0-9]/.test(value);
+
+      if (!value || value.length < 6 || (hasLetters && !hasNumbers && !hasSpecial) || (!hasLetters && hasNumbers && !hasSpecial)) {
+        return { cls: 'weak', label: 'Weak', width: '33%' };
+      }
+      if (hasLetters && hasNumbers && !(hasUpper && hasLower && hasSpecial)) {
+        return { cls: 'medium', label: 'Medium', width: '66%' };
+      }
+      if (hasUpper && hasLower && hasNumbers && hasSpecial) {
+        return { cls: 'strong', label: 'Strong', width: '100%' };
+      }
+      return { cls: 'medium', label: 'Medium', width: '66%' };
+    }
+
+    function paint() {
+      const result = evaluate(input.value);
+      fill.className = 'password-meter-fill ' + result.cls;
+      fill.style.width = result.width;
+      text.className = 'strength-text ' + result.cls;
+      text.textContent = result.label;
+    }
+
+    input.addEventListener('input', paint);
+    paint();
+  })();
+</script>
+{% endblock %}
