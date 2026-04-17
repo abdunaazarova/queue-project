@@ -18,9 +18,16 @@ class SignupForm(UserCreationForm):
         model = User
         fields = ('email', 'password1', 'password2')
 
+    def clean_email(self):
+        email = self.cleaned_data['email'].strip().lower()
+        if User.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError('This email is already registered.')
+        return email
+
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.username = self.cleaned_data['email']
+        user.email = self.cleaned_data['email'].strip().lower()
+        user.username = user.email
         if commit:
             user.save()
         return user

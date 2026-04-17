@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView, LogoutView
+from django.db import IntegrityError
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
@@ -13,10 +14,14 @@ class UserSignupView(CreateView):
     success_url = reverse_lazy('queues:services')
 
     def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        messages.success(self.request, 'Welcome to Navbat.uz!')
-        return redirect(self.success_url)
+        try:
+            user = form.save()
+            login(self.request, user)
+            messages.success(self.request, 'Welcome to Navbat.uz!')
+            return redirect(self.success_url)
+        except IntegrityError:
+            form.add_error('email', 'This email is already registered.')
+            return self.form_invalid(form)
 
 
 class UserLoginView(LoginView):

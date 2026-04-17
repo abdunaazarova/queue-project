@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 import dj_database_url
+from django.core.exceptions import ImproperlyConfigured
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -59,6 +60,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'navbat_uz.wsgi.application'
 
 database_url = os.getenv('DATABASE_URL', f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
+if not DEBUG and not os.getenv('DATABASE_URL'):
+    raise ImproperlyConfigured('DATABASE_URL must be set when DEBUG=False.')
 is_postgres = database_url.startswith('postgres://') or database_url.startswith('postgresql://')
 DATABASES = {
     'default': dj_database_url.config(
